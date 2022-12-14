@@ -1,2 +1,2 @@
 # OpenFASOC
-Fully-Autonomous SoC Synthesis using Customizable Cell-Based Synthesizable Analog Circuits
+FASOC in OpenFASOC stands for Fully-Autonomous SoC. It is used for automating the Synthesis process using Customizable Cell-Based Synthesizable Analog Circuits. OpenFASOC is focused on developing a complete system-on-chip (SoC) synthesis tool from user specification to GDSII using fully open-sourced tools. This project is led by a team of researchers at the University of Michigan is inspired from FASoC whcih sits on proprietary tools. 
