@@ -111,14 +111,20 @@ make sky130hd_temp
 ```
 #### SYNTHESIS
 The OpenROAD Flow starts with a flow configuration file (config.mk), the chosen platform (sky130hd, for example) and the Verilog files generated from the previous part. From them, synthesis is run using Yosys to find the appropriate circuit implementation from the available cells in the platform.The synthesis is run using Yosys to find the appropriate circuit implementation from the available cells in the platform. The synthesized verilog netlist is shown below in the following figure:
+![image](https://user-images.githubusercontent.com/86912339/207882405-17eddc9e-b7d1-4a06-899b-d08bce2a4d6c.png)
+
 
 #### FLOORPLAN
 Once Synthesis is successfully completed, floorplaaning is done. hen, the floorplan for the physical design is generated with OpenROAD, which requires a description of the power delivery network (in pdn.cfg).
 This temperature sensor design implements two voltage domains: one for the VDD that powers most of the circuit, and another for the VIN that powers the ring oscillator and is an output of the HEADER cells. Such voltage domains are created within the floorplan.tcl script
+![image](https://user-images.githubusercontent.com/86912339/207882586-67e0fd05-51f2-46df-a7e8-34bf5bae365e.png)
 
 
 #### PLACEMENT
 Placement takes place after the floorplan is ready and has two phases: global placement and detailed placement. The output of this phase will have all instances placed in their corresponding voltage domain, ready for routing.
+![image](https://user-images.githubusercontent.com/86912339/207882649-e9e4a514-cf6b-4161-84a9-d7f6116bcca6.png)
+![image](https://user-images.githubusercontent.com/86912339/207882685-5d0ebb9d-c35e-49dc-afd6-02eee3b04bff.png)
+![image](https://user-images.githubusercontent.com/86912339/207882780-faab96fc-a2cc-4c3d-a0d0-ecc6ed9e47f2.png)
 
 
 #### ROUTING
@@ -127,9 +133,13 @@ Routing is also divided into two phases: global routing and detailed routing. Ri
 
 This script sources two other files: add_ndr_rules.tcl, which adds an NDR rule to the VIN net to improve routes that connect both voltage domains, and create_custom_connections.tcl, which creates the connection between the VIN net and the HEADER instances.
 
-The Global route power and area report is shown as:
+The Routing Resource Analysis and the congenstion report is shown as:
+![image](https://user-images.githubusercontent.com/86912339/207883065-d6660210-f71a-49be-961e-795bbb5d1530.png)
+
 
 The Finished power and area report is shown as:
+![image](https://user-images.githubusercontent.com/86912339/207882116-ac871c6e-6d75-4d0c-9a65-026e7493e82b.png)
 
 
-The final design after Routing is shown as:
+The final design is shown as:
+![image](https://user-images.githubusercontent.com/86912339/207882043-07ba3b6d-8b7b-4965-997a-54adb4602394.png)
