@@ -143,3 +143,21 @@ The Finished power and area report is shown as:
 
 The final design is shown as:
 ![image](https://user-images.githubusercontent.com/86912339/207882043-07ba3b6d-8b7b-4965-997a-54adb4602394.png)
+
+## Contributors
+> Nishit Chechani 
+
+> Kunal Ghosh
+
+## Acknowledgments
+> Kunal Ghosh, Director, VSD Corp. Pvt. Ltd.
+
+## Contact Information
+> Nishit Dinesh Chechani, Postgraduate Student, International Institute of Information Technology, Bangalore 
+> > E-Mail: nishitchechani@gmail.com
+
+> Kunal Ghosh, Director, VSD Corp. Pvt. Ltd
+> > E-Mail: kunalghosh@gmail.com
+
+
+
