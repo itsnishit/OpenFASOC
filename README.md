@@ -1,7 +1,63 @@
 # OpenFASOC
 FASOC in OpenFASOC stands for Fully-Autonomous SoC. It is used for automating the Synthesis process using Customizable Cell-Based Synthesizable Analog Circuits. OpenFASOC is focused on developing a complete system-on-chip (SoC) synthesis tool from user specification to GDSII using fully open-sourced tools. This project is led by a team of researchers at the University of Michigan is inspired from FASoC whcih sits on proprietary tools. 
 
-# 1.1 OpenFASOC Design Flow
+# 1.1 Installation
+
+## OpenFASOC
+To install openfasoc run:
+```
+git clone https://github.com/idea-fasoc/openfasoc
+cd openfasoc
+pip install -r requirements.txt
+```
+## OpenROAD
+OpenROAD is an integrated chip physical design tool that takes a design from synthesized Verilog to routed layout. 
+```
+git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD.git
+cd OpenROAD
+./etc/DependencyInstaller.sh
+./etc/DependencyInstaller.sh -run
+./etc/DependencyInstaller.sh -dev
+mkdir build
+cd build
+cmake ..
+make
+```
+If the ./ command fails to execute, run the same command using "sudo" whcich will give permission to files which are unable to open.
+
+## Klayout
+```
+sudo apt install Klayout
+```
+
+## Netgen
+```
+sudo add-apt-repository ppa:ngsolve/ngsolve
+sudo apt-get update
+sudo apt-get install ngsolve
+```
+
+## Yosys
+Yosys is a framework for Verilog RTL synthesis. It currently has extensive Verilog-2005 support and provides a basic set of synthesis algorithms for various application domains. 
+Install the prerequisites as:
+
+```
+sudo apt-get install build-essential clang bison flex \
+libreadline-dev gawk tcl-dev libffi-dev git \
+graphviz xdot pkg-config python3 libboost-system-dev \
+libboost-python-dev libboost-filesystem-dev zlib1g-dev
+```
+Install Yosys as:
+```
+git clone https://github.com/YosysHQ/yosys.git
+make
+sudo make install 
+make test
+```
+
+
+
+# 1.2 OpenFASOC Design Flow
 ![image](https://user-images.githubusercontent.com/86912339/207783838-34f8b847-93f0-454c-b0be-bc1e8429e39c.png)
 
 The OpenFASOC Design flow starts by taking the design specifications in the form of `.json` format. The OpenFASOC uses an approach involving auxiliary cells. Auxiliary cells are manually designed standard cells which can act as reusable components in different analog circuits. Then the OpenFASOC generator determines the number of auxillary cell to be added to optimize the design. The generator uses the model file model file to automatically determine the number of Aux-Cell to be added. Here, the model file is saved in the form of a `.csv` file.
@@ -53,4 +109,27 @@ The remaining steps are automated by running the command:
 ```
 make sky130hd_temp
 ```
+#### SYNTHESIS
+The OpenROAD Flow starts with a flow configuration file (config.mk), the chosen platform (sky130hd, for example) and the Verilog files generated from the previous part. From them, synthesis is run using Yosys to find the appropriate circuit implementation from the available cells in the platform.The synthesis is run using Yosys to find the appropriate circuit implementation from the available cells in the platform. The synthesized verilog netlist is shown below in the following figure:
 
+#### FLOORPLAN
+Once Synthesis is successfully completed, floorplaaning is done. hen, the floorplan for the physical design is generated with OpenROAD, which requires a description of the power delivery network (in pdn.cfg).
+This temperature sensor design implements two voltage domains: one for the VDD that powers most of the circuit, and another for the VIN that powers the ring oscillator and is an output of the HEADER cells. Such voltage domains are created within the floorplan.tcl script
+
+
+#### PLACEMENT
+Placement takes place after the floorplan is ready and has two phases: global placement and detailed placement. The output of this phase will have all instances placed in their corresponding voltage domain, ready for routing.
+
+
+#### ROUTING
+Routing is also divided into two phases: global routing and detailed routing. Right before global routing, OpenFASoC calls pre_global_route.tcl:
+![image](https://user-images.githubusercontent.com/86912339/207863251-dcfb9863-99d4-4c71-93aa-b5937348c101.png)
+
+This script sources two other files: add_ndr_rules.tcl, which adds an NDR rule to the VIN net to improve routes that connect both voltage domains, and create_custom_connections.tcl, which creates the connection between the VIN net and the HEADER instances.
+
+The Global route power and area report is shown as:
+
+The Finished power and area report is shown as:
+
+
+The final design after Routing is shown as:
